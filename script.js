@@ -69,7 +69,6 @@ function handleContribution(event, contributor) {
     let usdAmount, bsAmount;
     
     if (contributor === 'juan') {
-        // Usa || 0 para que si el campo está vacío, lo trate como cero.
         usdAmount = parseFloat(document.getElementById('my-amount-usd').value) || 0;
         bsAmount = parseFloat(document.getElementById('my-amount-bs').value) || 0;
     } else { // brithany
@@ -172,12 +171,19 @@ function renderProposals() {
             // Gasto completado
             item.classList.add('spent');
             const details = prop.spendingDetails;
+            
+            // CORRECCIÓN PARA DATOS VIEJOS: Asegura que si la estructura no existe, se use 0
+            const juanUsd = details && details.juan && details.juan.usd !== undefined ? details.juan.usd : 0;
+            const juanBs = details && details.juan && details.juan.bs !== undefined ? details.juan.bs : 0;
+            const brithanyUsd = details && details.brithany && details.brithany.usd !== undefined ? details.brithany.usd : 0;
+            const brithanyBs = details && details.brithany && details.brithany.bs !== undefined ? details.brithany.bs : 0;
+
             const spentDetails = `
                 <div>
                     <strong>¡Gasto Completado!</strong><br>
                     <small>
-                        Juan descontó: $${details.juan.usd.toFixed(2)} / ${Math.round(details.juan.bs)} Bs<br>
-                        Brithany descontó: $${details.brithany.usd.toFixed(2)} / ${Math.round(details.brithany.bs)} Bs
+                        Juan descontó: $${juanUsd.toFixed(2)} / ${Math.round(juanBs)} Bs<br>
+                        Brithany descontó: $${brithanyUsd.toFixed(2)} / ${Math.round(brithanyBs)} Bs
                     </small>
                 </div>
             `;
@@ -203,27 +209,27 @@ window.showSpendForm = function(id) {
     spendForm.innerHTML = `
         <h4>Distribución del Gasto (Descuento)</h4>
         
-        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px;">
+        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px; border-radius: 5px;">
             <h5 style="margin: 0; flex: 100%;">Descuento de Juan:</h5>
             <div style="flex:1;">
                 <label for="juan-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
+                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%; padding: 8px;">
             </div>
             <div style="flex:1;">
                 <label for="juan-spent-bs-${id}">Bs:</label>
-                <input type="number" id="juan-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%;">
+                <input type="number" id="juan-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%; padding: 8px;">
             </div>
         </div>
 
-        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px;">
+        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px; border-radius: 5px;">
             <h5 style="margin: 0; flex: 100%;">Descuento de Brithany:</h5>
             <div style="flex:1;">
                 <label for="brithany-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
+                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%; padding: 8px;">
             </div>
             <div style="flex:1;">
                 <label for="brithany-spent-bs-${id}">Bs:</label>
-                <input type="number" id="brithany-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%;">
+                <input type="number" id="brithany-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%; padding: 8px;">
             </div>
         </div>
 

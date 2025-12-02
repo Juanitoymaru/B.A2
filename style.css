@@ -97,7 +97,7 @@ button:hover {
     width: calc(33.33% - 8px); /* Para dividir en 3 columnas */
     margin-right: 5px;
     display: inline-block; /* Crucial para alineación */
-    padding: 10px; /* Ya estaba, pero lo repetimos para claridad */
+    padding: 10px; 
     border: 1px solid #ddd;
     border-radius: 6px;
     box-sizing: border-box;
@@ -153,4 +153,12 @@ button:hover {
     display: block;
     margin-bottom: 2px;
     font-weight: bold;
+}
+
+/* CORRECCIÓN CRÍTICA 3: Asegura que los inputs de descuento se vean bien en el formulario dinámico */
+.spend-form input[type="number"] {
+    width: 100%; 
+    padding: 8px; 
+    box-sizing: border-box;
+    margin-top: 5px;
 }

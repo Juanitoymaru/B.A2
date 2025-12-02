@@ -54,14 +54,16 @@ h2 {
 }
 
 /* Estilos para Formularios */
-input[type="number"], input[type="text"], select {
-    width: calc(50% - 10px);
+
+/* CORRECCIÓN CRÍTICA 1: Asegura que los campos de aporte USD y BS estén lado a lado */
+#my-contribution-form input, #her-contribution-form input {
+    width: calc(50% - 5px); /* Ajustado para dejar espacio */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
     box-sizing: border-box;
-    display: inline-block;
+    display: inline-block; /* Crucial para alineación */
 }
 
 input[type="text"] {
@@ -90,10 +92,17 @@ button:hover {
     width: 100%;
 }
 
+/* CORRECCIÓN CRÍTICA 2: Asegura que los campos de propuesta estén lado a lado */
 #new-proposal-form input, #new-proposal-form select {
-    width: calc(33% - 10px);
-    margin-right: 10px;
+    width: calc(33.33% - 8px); /* Para dividir en 3 columnas */
+    margin-right: 5px;
+    display: inline-block; /* Crucial para alineación */
+    padding: 10px; /* Ya estaba, pero lo repetimos para claridad */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
+
 
 /* Estilos para las listas de propuestas */
 .proposal-list {
@@ -130,5 +139,18 @@ button:hover {
 
 .spent {
     background-color: #ffe0b2; /* Fondo de gasto completado */
-    opacity: 0.7;
+    opacity: 0.95;
+}
+
+/* Estilos para el formulario de gasto que aparece dinámicamente */
+.spend-form h5 {
+    font-size: 1em;
+    margin: 5px 0;
+    color: #333;
+}
+.spend-form label {
+    font-size: 0.85em;
+    display: block;
+    margin-bottom: 2px;
+    font-weight: bold;
 }

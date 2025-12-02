@@ -175,7 +175,10 @@ function renderProposals() {
             const spentDetails = `
                 <div>
                     <strong>¡Gasto Completado!</strong><br>
-                    <small>Juan descontó: $${details.juan.toFixed(2)} - Brithany descontó: $${details.brithany.toFixed(2)}</small>
+                    <small>
+                        Juan descontó: $${details.juan.usd.toFixed(2)} / ${Math.round(details.juan.bs)} Bs<br>
+                        Brithany descontó: $${details.brithany.usd.toFixed(2)} / ${Math.round(details.brithany.bs)} Bs
+                    </small>
                 </div>
             `;
             item.innerHTML = spentDetails;
@@ -191,25 +194,39 @@ window.showSpendForm = function(id) {
 
     const itemEl = document.querySelector(`.proposal-item[data-id="${id}"]`);
     
-    // Si el formulario ya está visible, no hacer nada o quitarlo
     if (itemEl.querySelector('.spend-form')) return;
 
-    // Crear el formulario de gasto dinámicamente
+    // Crear el formulario de gasto dinámicamente con campos para USD y BS
     const spendForm = document.createElement('form');
     spendForm.className = 'spend-form';
     spendForm.style.marginTop = '15px';
     spendForm.innerHTML = `
-        <h4>Distribución del Gasto (Descuento de USD)</h4>
-        <div style="display:flex; gap:10px;">
+        <h4>Distribución del Gasto (Descuento)</h4>
+        
+        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px;">
+            <h5 style="margin: 0; flex: 100%;">Descuento de Juan:</h5>
             <div style="flex:1;">
-                <label for="juan-spent-${id}">Juan descuenta ($):</label>
-                <input type="number" id="juan-spent-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
+                <label for="juan-spent-usd-${id}">USD ($):</label>
+                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
             </div>
             <div style="flex:1;">
-                <label for="brithany-spent-${id}">Brithany descuenta ($):</label>
-                <input type="number" id="brithany-spent-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
+                <label for="juan-spent-bs-${id}">Bs:</label>
+                <input type="number" id="juan-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%;">
             </div>
         </div>
+
+        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px;">
+            <h5 style="margin: 0; flex: 100%;">Descuento de Brithany:</h5>
+            <div style="flex:1;">
+                <label for="brithany-spent-usd-${id}">USD ($):</label>
+                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%;">
+            </div>
+            <div style="flex:1;">
+                <label for="brithany-spent-bs-${id}">Bs:</label>
+                <input type="number" id="brithany-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%;">
+            </div>
+        </div>
+
         <button type="submit" style="background-color:#4CAF50;">Confirmar y Descontar</button>
     `;
 
@@ -217,28 +234,42 @@ window.showSpendForm = function(id) {
     spendForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const juanSpent = parseFloat(document.getElementById(`juan-spent-${id}`).value) || 0;
-        const brithanySpent = parseFloat(document.getElementById(`brithany-spent-${id}`).value) || 0;
+        // --- Obtener Montos de Gasto ---
+        const juanSpentUsd = parseFloat(document.getElementById(`juan-spent-usd-${id}`).value) || 0;
+        const juanSpentBs = parseFloat(document.getElementById(`juan-spent-bs-${id}`).value) || 0;
+        const brithanySpentUsd = parseFloat(document.getElementById(`brithany-spent-usd-${id}`).value) || 0;
+        const brithanySpentBs = parseFloat(document.getElementById(`brithany-spent-bs-${id}`).value) || 0;
         
-        // --- Validación de saldo simple (opcional) ---
-        if (juanSpent > balances.juan.usd || brithanySpent > balances.brithany.usd) {
+        // --- Validación de saldo simple ---
+        if (juanSpentUsd > balances.juan.usd || brithanySpentUsd > balances.brithany.usd) {
              alert('¡Error! Uno de los saldos en USD no es suficiente para cubrir el descuento.');
              return;
         }
+        if (juanSpentBs > balances.juan.bs || brithanySpentBs > balances.brithany.bs) {
+             alert('¡Error! Uno de los saldos en Bolívares (Bs) no es suficiente para cubrir el descuento.');
+             return;
+        }
 
-        // Aplicar descuento
-        balances.juan.usd -= juanSpent;
-        balances.brithany.usd -= brithanySpent;
+        // --- Aplicar Descuento a los saldos correctos ---
+        balances.juan.usd -= juanSpentUsd;
+        balances.juan.bs -= juanSpentBs;
+        balances.brithany.usd -= brithanySpentUsd;
+        balances.brithany.bs -= brithanySpentBs;
 
-        // Marcar como gastado
+        // Marcar como gastado y guardar detalles
         proposal.spent = true;
-        proposal.spendingDetails = { juan: juanSpent, brithany: brithanySpent };
+        proposal.spendingDetails = { 
+            juan: { usd: juanSpentUsd, bs: juanSpentBs }, 
+            brithany: { usd: brithanySpentUsd, bs: brithanySpentBs } 
+        };
 
         saveData();
         updateDisplay();
     });
 
-    // Agregar el formulario al elemento de la propuesta
+    // Remover botones de acción y agregar el formulario
+    const actionEl = itemEl.querySelector('.proposal-actions');
+    actionEl.remove();
     itemEl.appendChild(spendForm);
 }
 

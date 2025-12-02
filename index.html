@@ -17,25 +17,25 @@
     <main class="container">
         <section class="savings-container">
             <div class="card my-savings">
-                <h2><i class="fas fa-user"></i> Mis Ahorros</h2>
+                <h2><i class="fas fa-user"></i> Juan</h2>
                 <div class="current-balance">
                     <span id="my-balance-usd">$0.00</span> / <span id="my-balance-bs">0 Bs</span>
                 </div>
                 <form id="my-contribution-form">
-                    <input type="number" id="my-amount-usd" placeholder="Monto ($)" required min="0.01">
-                    <input type="number" id="my-amount-bs" placeholder="Monto (Bs)" required min="1">
+                    <input type="number" id="my-amount-usd" placeholder="Monto ($)" required min="0.01" step="0.01">
+                    <input type="number" id="my-amount-bs" placeholder="Monto (Bs)" required min="1" step="1">
                     <button type="submit">Añadir Aporte</button>
                 </form>
             </div>
 
             <div class="card her-savings">
-                <h2><i class="fas fa-heart"></i> Ahorros de Ella</h2>
+                <h2><i class="fas fa-heart"></i> Brithany</h2>
                 <div class="current-balance">
                     <span id="her-balance-usd">$0.00</span> / <span id="her-balance-bs">0 Bs</span>
                 </div>
                 <form id="her-contribution-form">
-                    <input type="number" id="her-amount-usd" placeholder="Monto ($)" required min="0.01">
-                    <input type="number" id="her-amount-bs" placeholder="Monto (Bs)" required min="1">
+                    <input type="number" id="her-amount-usd" placeholder="Monto ($)" required min="0.01" step="0.01">
+                    <input type="number" id="her-amount-bs" placeholder="Monto (Bs)" required min="1" step="1">
                     <button type="submit">Añadir Aporte</button>
                 </form>
             </div>
@@ -46,10 +46,10 @@
             
             <form id="new-proposal-form">
                 <input type="text" id="proposal-name" placeholder="Nombre de la idea (Ej: Cena romántica)" required>
-                <input type="number" id="proposal-cost" placeholder="Costo Estimado ($)" required min="0.01">
+                <input type="number" id="proposal-cost" placeholder="Costo Estimado ($)" required min="0.01" step="0.01">
                 <select id="proposal-proposer">
-                    <option value="Yo">Propuesto por Mí</option>
-                    <option value="Ella">Propuesto por Ella</option>
+                    <option value="Juan">Propuesto por Juan</option>
+                    <option value="Brithany">Propuesto por Brithany</option>
                 </select>
                 <button type="submit">Proponer Idea</button>
             </form>

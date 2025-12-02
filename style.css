@@ -7,11 +7,18 @@ body {
 }
 
 header {
-    background-color: #ff69b4; /* Rosa romántico */
+    /* Color Principal: Morado Suave y Bonito */
+    background-color: #9370DB; 
     color: white;
     padding: 20px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #9370DB; /* Los títulos secundarios en morado */
+    border-bottom: 2px solid #9370DB20; /* Línea suave debajo */
+    padding-bottom: 10px;
 }
 
 .container {
@@ -36,13 +43,13 @@ header {
 
 /* Estilos de Ahorro */
 .my-savings, .her-savings {
-    flex: 1; /* Ocupan la mitad del espacio */
+    flex: 1; 
 }
 
 .current-balance {
     font-size: 2.2em;
     font-weight: bold;
-    color: #4CAF50; /* Verde para el saldo */
+    color: #4CAF50; /* Dejamos el verde por ahora para el dinero */
     margin: 10px 0 20px;
 }
 
@@ -62,17 +69,20 @@ input[type="text"] {
 }
 
 button {
-    background-color: #ff69b4;
+    /* Color Principal: Morado Suave y Bonito */
+    background-color: #9370DB; 
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 5px;
 }
 
 button:hover {
-    background-color: #d15197;
+    /* Un poco más oscuro para el efecto de pasar el mouse */
+    background-color: #7957c5; 
 }
 
 /* Estilos de Propuestas */
@@ -80,19 +90,41 @@ button:hover {
     width: 100%;
 }
 
-#new-proposal-form input {
+#new-proposal-form input, #new-proposal-form select {
     width: calc(33% - 10px);
+    margin-right: 10px;
 }
 
-/* Elementos de Lista (que creará JavaScript) */
+/* Estilos para las listas de propuestas */
+.proposal-list {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
 .proposal-item {
+    background-color: #f9f9f9;
     padding: 15px;
-    border-bottom: 1px dashed #eee;
+    border-left: 5px solid #9370DB;
+    border-radius: 5px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.proposal-item:last-child {
-    border-bottom: none;
+.proposal-actions button {
+    margin-left: 10px;
+    padding: 8px 12px;
+}
+
+/* Estilo para propuestas aprobadas (opcional) */
+.approved {
+    border-left: 5px solid #4CAF50; /* Verde de aprobado */
+}
+
+.spent {
+    background-color: #ffe0b2; /* Fondo de gasto completado */
+    opacity: 0.7;
 }

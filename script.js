@@ -1,8 +1,8 @@
 // ==========================================================
-// 1. CONFIGURACIÓN INICIAL
+// 1. CONFIGURACIÓN INICIAL & FIREBASE
 // ==========================================================
 
-// Tasa de cambio (puedes ajustarla si cambia la economía)
+// Tasa de cambio (opcional, para futuras conversiones)
 const EXCHANGE_RATE = 36.5; 
 
 // Obtener elementos del DOM (HTML)
@@ -17,7 +17,24 @@ const newProposalForm = document.getElementById('new-proposal-form');
 const pendingProposalsEl = document.getElementById('pending-proposals');
 const approvedProposalsEl = document.getElementById('approved-proposals');
 
-// Estructura de datos inicial
+// ** TUS CREDENCIALES DE FIREBASE (NO LAS CAMBIES) **
+const firebaseConfig = {
+    apiKey: "AIzaSyDk-Yl2D-WWkIrEU7pSbt4JkDTSMyODLRU",
+    authDomain: "ahorros-75301.firebaseapp.com",
+    databaseURL: "https://ahorros-75301-default-rtdb.firebaseio.com",
+    projectId: "ahorros-75301",
+    storageBucket: "ahorros-75301.firebasestorage.app",
+    messagingSenderId: "534597766092",
+    appId: "1:534597766092:web:2d0d32fc727ff2076a2b69",
+    measurementId: "G-6RWD65F1FT"
+};
+
+// Inicializar Firebase y obtener referencia a la base de datos
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const dbRef = database.ref('/'); // Referencia a la raíz de tu base de datos
+
+// Estructura de datos local (se sobrescribe con los datos de Firebase)
 let balances = {
     juan: { usd: 0, bs: 0 },
     brithany: { usd: 0, bs: 0 }
@@ -26,28 +43,44 @@ let balances = {
 let proposals = [];
 
 // ==========================================================
-// 2. FUNCIONES DE MANEJO DE DATOS Y LOCALSTORAGE
+// 2. FUNCIONES DE MANEJO DE DATOS Y FIREBASE (SINCRONIZACIÓN)
 // ==========================================================
 
-// Carga los datos guardados en localStorage
-function loadData() {
-    const savedBalances = localStorage.getItem('savingsBalances');
-    if (savedBalances) {
-        balances = JSON.parse(savedBalances);
-    }
-    const savedProposals = localStorage.getItem('savingsProposals');
-    if (savedProposals) {
-        proposals = JSON.parse(savedProposals);
-    }
-}
-
-// Guarda los balances y propuestas en localStorage
+/**
+ * Guarda el estado actual de balances y proposals en Firebase.
+ */
 function saveData() {
-    localStorage.setItem('savingsBalances', JSON.stringify(balances));
-    localStorage.setItem('savingsProposals', JSON.stringify(proposals));
+    const dataToSave = {
+        balances: balances,
+        proposals: proposals
+    };
+    dbRef.set(dataToSave)
+        .catch(error => console.error("Error al guardar en Firebase:", error));
 }
 
-// Actualiza la visualización de los saldos en el HTML
+/**
+ * Configura un listener para escuchar cambios en tiempo real en Firebase.
+ */
+function setupRealtimeListener() {
+    dbRef.on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            // Sobrescribe las variables locales con los datos de Firebase
+            balances = data.balances || balances;
+            proposals = data.proposals || proposals; 
+            
+            // Actualiza la vista de la aplicación para ambos usuarios
+            updateDisplay();
+        } else {
+            // Si la base de datos está vacía, guarda la estructura inicial para empezar
+            saveData();
+        }
+    });
+}
+
+/**
+ * Actualiza la visualización de los saldos en el HTML.
+ */
 function updateDisplay() {
     // Redondea los dólares a 2 decimales y los bolívares a enteros
     myBalanceUsdEl.textContent = `$${balances.juan.usd.toFixed(2)}`;
@@ -60,7 +93,7 @@ function updateDisplay() {
 }
 
 // ==========================================================
-// 3. MANEJO DE APORTES (Aporte flexible $)
+// 3. MANEJO DE APORTES 
 // ==========================================================
 
 function handleContribution(event, contributor) {
@@ -76,9 +109,8 @@ function handleContribution(event, contributor) {
         bsAmount = parseFloat(document.getElementById('her-amount-bs').value) || 0;
     }
 
-    // Validación: Debe aportar al menos un monto positivo en cualquiera de las monedas.
     if (usdAmount <= 0 && bsAmount <= 0) {
-        alert('Por favor, ingresa un monto positivo en Dólares ($) O en Bolívares (Bs).');
+        console.error('Por favor, ingresa un monto positivo en Dólares ($) O en Bolívares (Bs).');
         return;
     }
 
@@ -86,8 +118,8 @@ function handleContribution(event, contributor) {
     balances[contributor].usd += usdAmount;
     balances[contributor].bs += bsAmount;
 
+    // Guardar en Firebase (activa la sincronización)
     saveData();
-    updateDisplay();
 
     // Limpiar el formulario
     event.target.reset();
@@ -109,7 +141,7 @@ function handleNewProposal(event) {
     const proposer = document.getElementById('proposal-proposer').value;
 
     if (cost <= 0) {
-        alert('El costo estimado debe ser un monto positivo.');
+        console.error('El costo estimado debe ser un monto positivo.');
         return;
     }
 
@@ -123,15 +155,19 @@ function handleNewProposal(event) {
         spendingDetails: null 
     };
 
+    // Añadir la propuesta
     proposals.push(newProposal);
+    
+    // Guardar en Firebase
     saveData();
-    updateDisplay();
     event.target.reset();
 }
 
 newProposalForm.addEventListener('submit', handleNewProposal);
 
-// Renderiza las propuestas en las listas correspondientes
+/**
+ * Renderiza las propuestas en las secciones de Pendientes y Aprobadas/Gastadas.
+ */
 function renderProposals() {
     // Limpiar listas
     pendingProposalsEl.innerHTML = '<h3>Ideas Pendientes de Aprobación:</h3>';
@@ -172,7 +208,7 @@ function renderProposals() {
             item.classList.add('spent');
             const details = prop.spendingDetails;
             
-            // CORRECCIÓN PARA DATOS VIEJOS: Asegura que si la estructura no existe, se use 0
+            // Asegura que los valores existan antes de mostrarlos
             const juanUsd = details && details.juan && details.juan.usd !== undefined ? details.juan.usd : 0;
             const juanBs = details && details.juan && details.juan.bs !== undefined ? details.juan.bs : 0;
             const brithanyUsd = details && details.brithany && details.brithany.usd !== undefined ? details.brithany.usd : 0;
@@ -193,21 +229,25 @@ function renderProposals() {
     });
 }
 
-// Función para mostrar el formulario de registro de gastos
+/**
+ * Muestra el formulario para registrar el gasto real y descontar saldos.
+ */
 window.showSpendForm = function(id) {
     const proposal = proposals.find(p => p.id === id);
     if (!proposal) return;
 
     const itemEl = document.querySelector(`.proposal-item[data-id="${id}"]`);
     
+    // Evitar que se cree más de un formulario de gasto
     if (itemEl.querySelector('.spend-form')) return;
 
-    // Crear el formulario de gasto dinámicamente con campos para USD y BS
+    // Calcula el monto sugerido (50% de la propuesta)
+    const suggestedCost = (proposal.cost / 2).toFixed(2);
+    
     const spendForm = document.createElement('form');
     spendForm.className = 'spend-form';
     spendForm.style.marginTop = '15px';
     
-    // START: HTML MODIFICADO PARA USAR CLASES CSS
     spendForm.innerHTML = `
         <h4>Distribución del Gasto (Descuento)</h4>
         
@@ -215,7 +255,7 @@ window.showSpendForm = function(id) {
             <h5>Descuento de Juan:</h5>
             <div class="input-group">
                 <label for="juan-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01">
+                <input type="number" id="juan-spent-usd-${id}" value="${suggestedCost}" required min="0" step="0.01">
             </div>
             <div class="input-group">
                 <label for="juan-spent-bs-${id}">Bs:</label>
@@ -227,7 +267,7 @@ window.showSpendForm = function(id) {
             <h5>Descuento de Brithany:</h5>
             <div class="input-group">
                 <label for="brithany-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01">
+                <input type="number" id="brithany-spent-usd-${id}" value="${suggestedCost}" required min="0" step="0.01">
             </div>
             <div class="input-group">
                 <label for="brithany-spent-bs-${id}">Bs:</label>
@@ -237,7 +277,6 @@ window.showSpendForm = function(id) {
 
         <button type="submit" style="background-color:#4CAF50;">Confirmar y Descontar</button>
     `;
-    // END: HTML MODIFICADO
 
     // Manejar el envío del formulario de gasto
     spendForm.addEventListener('submit', (e) => {
@@ -249,13 +288,13 @@ window.showSpendForm = function(id) {
         const brithanySpentUsd = parseFloat(document.getElementById(`brithany-spent-usd-${id}`).value) || 0;
         const brithanySpentBs = parseFloat(document.getElementById(`brithany-spent-bs-${id}`).value) || 0;
         
-        // --- Validación de saldo simple ---
+        // --- Validación del Saldo ---
         if (juanSpentUsd > balances.juan.usd || brithanySpentUsd > balances.brithany.usd) {
-             alert('¡Error! Uno de los saldos en USD no es suficiente para cubrir el descuento.');
+             console.error('¡Error! Uno de los saldos en USD no es suficiente para cubrir el descuento.');
              return;
         }
         if (juanSpentBs > balances.juan.bs || brithanySpentBs > balances.brithany.bs) {
-             alert('¡Error! Uno de los saldos en Bolívares (Bs) no es suficiente para cubrir el descuento.');
+             console.error('¡Error! Uno de los saldos en Bolívares (Bs) no es suficiente para cubrir el descuento.');
              return;
         }
 
@@ -272,8 +311,8 @@ window.showSpendForm = function(id) {
             brithany: { usd: brithanySpentUsd, bs: brithanySpentBs } 
         };
 
+        // Guardar en Firebase (activa la sincronización)
         saveData();
-        updateDisplay();
     });
 
     // Remover botones de acción y agregar el formulario
@@ -282,23 +321,27 @@ window.showSpendForm = function(id) {
     itemEl.appendChild(spendForm);
 }
 
-// Función para aprobar una propuesta
+/**
+ * Función global para aprobar una propuesta.
+ */
 window.approveProposal = function(id) {
     const proposal = proposals.find(p => p.id === id);
     if (proposal) {
         proposal.approved = true;
+        // Guardar en Firebase (activa la sincronización)
         saveData();
-        updateDisplay();
     }
 }
 
-// Función para eliminar una propuesta
+/**
+ * Función global para eliminar una propuesta.
+ */
 window.deleteProposal = function(id) {
-    if (confirm('¿Estás seguro de que quieres eliminar esta idea?')) {
-        proposals = proposals.filter(p => p.id !== id);
-        saveData();
-        updateDisplay();
-    }
+    console.warn(`Intentando eliminar la propuesta con ID: ${id}`);
+    
+    proposals = proposals.filter(p => p.id !== id);
+    // Guardar en Firebase (activa la sincronización)
+    saveData();
 }
 
 
@@ -306,6 +349,5 @@ window.deleteProposal = function(id) {
 // 5. INICIALIZACIÓN
 // ==========================================================
 
-// Carga los datos al iniciar la página y actualiza la vista
-loadData(); 
-updateDisplay();
+// Inicia el listener para cargar datos y mantenerse sincronizado en tiempo real
+setupRealtimeListener();

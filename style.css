@@ -162,3 +162,48 @@ button:hover {
     box-sizing: border-box;
     margin-top: 5px;
 }
+
+
+/* ========================================================== */
+/* NUEVOS ESTILOS PARA LA DISTRIBUCIÓN DE GASTO (SOLUCIÓN AL CRAMPEO) */
+/* ========================================================== */
+
+/* Contenedor principal de cada persona */
+.spend-row {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px; /* Más espacio entre columnas */
+    margin-bottom: 15px;
+    border: 1px dashed #9370DB50; /* Línea de color más acorde al tema */
+    padding: 10px;
+    border-radius: 8px;
+    align-items: flex-end; /* Alinea los inputs en la base */
+}
+
+/* Título (Ej: Descuento de Juan) */
+.spend-row h5 {
+    width: 100%; /* El título debe ocupar toda la fila superior */
+    color: #9370DB;
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+}
+
+/* Grupos de Input (USD y Bs) */
+.input-group {
+    flex: 1; /* Distribuye el espacio equitativamente */
+    min-width: 100px; /* Evita que se compriman demasiado en pantallas pequeñas */
+}
+
+.input-group label {
+    font-size: 0.9em;
+    font-weight: normal;
+    display: block;
+    margin-bottom: 2px;
+}
+/* Reafirma el estilo para los inputs dentro de este formulario */
+.spend-row input[type="number"] {
+    padding: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0;
+}

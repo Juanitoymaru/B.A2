@@ -206,35 +206,38 @@ window.showSpendForm = function(id) {
     const spendForm = document.createElement('form');
     spendForm.className = 'spend-form';
     spendForm.style.marginTop = '15px';
+    
+    // START: HTML MODIFICADO PARA USAR CLASES CSS
     spendForm.innerHTML = `
         <h4>Distribución del Gasto (Descuento)</h4>
         
-        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px; border-radius: 5px;">
-            <h5 style="margin: 0; flex: 100%;">Descuento de Juan:</h5>
-            <div style="flex:1;">
+        <div class="spend-row">
+            <h5>Descuento de Juan:</h5>
+            <div class="input-group">
                 <label for="juan-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%; padding: 8px;">
+                <input type="number" id="juan-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01">
             </div>
-            <div style="flex:1;">
+            <div class="input-group">
                 <label for="juan-spent-bs-${id}">Bs:</label>
-                <input type="number" id="juan-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%; padding: 8px;">
+                <input type="number" id="juan-spent-bs-${id}" value="0" required min="0" step="1">
             </div>
         </div>
 
-        <div style="display:flex; gap:10px; margin-bottom: 10px; border: 1px dashed #ccc; padding: 10px; border-radius: 5px;">
-            <h5 style="margin: 0; flex: 100%;">Descuento de Brithany:</h5>
-            <div style="flex:1;">
+        <div class="spend-row">
+            <h5>Descuento de Brithany:</h5>
+            <div class="input-group">
                 <label for="brithany-spent-usd-${id}">USD ($):</label>
-                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01" style="width:100%; padding: 8px;">
+                <input type="number" id="brithany-spent-usd-${id}" value="${(proposal.cost / 2).toFixed(2)}" required min="0" step="0.01">
             </div>
-            <div style="flex:1;">
+            <div class="input-group">
                 <label for="brithany-spent-bs-${id}">Bs:</label>
-                <input type="number" id="brithany-spent-bs-${id}" value="0" required min="0" step="1" style="width:100%; padding: 8px;">
+                <input type="number" id="brithany-spent-bs-${id}" value="0" required min="0" step="1">
             </div>
         </div>
 
         <button type="submit" style="background-color:#4CAF50;">Confirmar y Descontar</button>
     `;
+    // END: HTML MODIFICADO
 
     // Manejar el envío del formulario de gasto
     spendForm.addEventListener('submit', (e) => {

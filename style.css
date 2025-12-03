@@ -165,7 +165,7 @@ button:hover {
 
 
 /* ========================================================== */
-/* NUEVOS ESTILOS PARA LA DISTRIBUCIÓN DE GASTO (SOLUCIÓN AL CRAMPEO) */
+/* ESTILOS PARA LA DISTRIBUCIÓN DE GASTO DINÁMICO (ARREGLO DE ESPACIADO) */
 /* ========================================================== */
 
 /* Contenedor principal de cada persona */
@@ -191,7 +191,7 @@ button:hover {
 /* Grupos de Input (USD y Bs) */
 .input-group {
     flex: 1; /* Distribuye el espacio equitativamente */
-    min-width: 100px; /* Evita que se compriman demasiado en pantallas pequeñas */
+    min-width: 100px; 
 }
 
 .input-group label {
@@ -206,4 +206,50 @@ button:hover {
     box-sizing: border-box;
     width: 100%;
     margin-top: 0;
+}
+
+
+/* ========================================================== */
+/* 4. MEDIA QUERIES (RESPONSIVE DESIGN PARA CELULAR) */
+/* ========================================================== */
+
+@media (max-width: 600px) {
+    
+    .container {
+        margin: 15px auto; /* Reducir el margen superior/inferior en móvil */
+        padding: 0 10px; /* Reducir el padding lateral */
+    }
+
+    /* 1. Contenedores de Ahorro: Apilar las tarjetas */
+    .savings-container {
+        flex-direction: column;
+        gap: 15px; 
+    }
+
+    /* 2. Formulario de Aporte (Juan y Brithany): Inputs al 100% */
+    #my-contribution-form input, 
+    #her-contribution-form input {
+        width: 100%; 
+        display: block; 
+        margin-right: 0;
+    }
+    
+    /* 3. Formulario de Propuesta: Inputs y Select al 100% */
+    #new-proposal-form input, 
+    #new-proposal-form select {
+        width: 100%;
+        display: block;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    /* 4. Formulario Dinámico de Gasto (spend-row): Ajustar */
+    .spend-row {
+        gap: 10px;
+    }
+    
+    /* Permite que USD y Bs se sigan mostrando lado a lado */
+    .input-group {
+        min-width: 45%; 
+    }
 }

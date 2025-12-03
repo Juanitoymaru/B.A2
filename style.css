@@ -1,255 +1,304 @@
+/* Estilos Globales */
+:root {
+    --color-primary: #4CAF50; /* Verde principal */
+    --color-secondary: #FF6F61; /* Rojo/Coral para contraste */
+    --color-background: #f4f4f9;
+    --color-card-bg: #ffffff;
+    --color-text: #333;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f6; /* Fondo gris muy claro */
-    color: #333;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
     margin: 0;
     padding: 0;
-}
-
-header {
-    /* Color Principal: Morado Suave y Bonito */
-    background-color: #9370DB; 
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    color: #9370DB; /* Los títulos secundarios en morado */
-    border-bottom: 2px solid #9370DB20; /* Línea suave debajo */
-    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--color-shadow);
 }
 
-.savings-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+h1, h2, h3 {
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+}
+
+.tagline {
+    text-align: center;
+    font-style: italic;
+    color: #666;
     margin-bottom: 30px;
 }
 
-.card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+/* Secciones */
+section {
+    padding: 20px;
+    margin-bottom: 25px;
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--color-shadow);
 }
 
-/* Estilos de Ahorro */
-.my-savings, .her-savings {
-    flex: 1; 
+/* SALDOS */
+.balances {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.current-balance {
-    font-size: 2.2em;
+.balance-card {
+    flex: 1 1 200px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.balance-card h3 {
+    margin-top: 0;
+    color: var(--color-text);
+}
+
+.balance-card p {
+    font-size: 1.2em;
     font-weight: bold;
-    color: #4CAF50; /* Dejamos el verde por ahora para el dinero */
-    margin: 10px 0 20px;
+    margin: 5px 0;
 }
 
-/* Estilos para Formularios */
+.balance-card.juan {
+    background-color: #e0f7e6; /* Verde claro */
+    border-left: 5px solid var(--color-primary);
+}
 
-/* CORRECCIÓN CRÍTICA 1: Asegura que los campos de aporte USD y BS estén lado a lado */
-#my-contribution-form input, #her-contribution-form input {
-    width: calc(50% - 5px); /* Ajustado para dejar espacio */
+.balance-card.brithany {
+    background-color: #f7e0e0; /* Rosa claro */
+    border-left: 5px solid var(--color-secondary);
+}
+
+/* APORTES */
+.forms-group {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.contribution-form {
+    flex: 1 1 40%;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    min-width: 250px;
+}
+
+.contribution-form.juan {
+    border: 1px solid #d4edda;
+}
+
+.contribution-form.brithany {
+    border: 1px solid #f8d7da;
+}
+
+/* FORMULARIOS GENERALES */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 calc(50% - 15px);
+}
+
+.input-group.full-width {
+    flex: 1 1 100%;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+input[type="text"], input[type="number"], select {
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 6px;
+    font-size: 1em;
     box-sizing: border-box;
-    display: inline-block; /* Crucial para alineación */
+    transition: border-color 0.3s;
 }
 
-input[type="text"] {
-    width: 100%;
+input:focus, select:focus {
+    border-color: var(--color-primary);
+    outline: none;
 }
 
-button {
-    /* Color Principal: Morado Suave y Bonito */
-    background-color: #9370DB; 
-    color: white;
+.submit-btn {
     padding: 10px 15px;
+    background-color: var(--color-primary);
+    color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
-button:hover {
-    /* Un poco más oscuro para el efecto de pasar el mouse */
-    background-color: #7957c5; 
+.submit-btn:hover {
+    background-color: #388e3c;
+    transform: translateY(-1px);
 }
 
-/* Estilos de Propuestas */
-.proposals-container {
-    width: 100%;
+.submit-btn.full-width {
+    flex: 1 1 100%;
 }
 
-/* CORRECCIÓN CRÍTICA 2: Asegura que los campos de propuesta estén lado a lado */
-#new-proposal-form input, #new-proposal-form select {
-    width: calc(33.33% - 8px); /* Para dividir en 3 columnas */
-    margin-right: 5px;
-    display: inline-block; /* Crucial para alineación */
-    padding: 10px; 
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
+/* LISTAS DE PROPUESTAS */
+.proposals-list {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-
-/* Estilos para las listas de propuestas */
-.proposal-list {
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+.list-section {
+    flex: 1 1 calc(50% - 10px);
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    min-width: 300px;
 }
 
 .proposal-item {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-left: 5px solid #9370DB;
-    border-radius: 5px;
-    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: var(--color-card-bg);
+    box-shadow: 0 1px 3px var(--color-shadow);
 }
 
-.proposal-item:last-child {
-    border-bottom: none;
+.proposal-item.approved {
+    border-left: 5px solid #2196F3; /* Azul para Aprobado */
+}
+
+.proposal-item.spent {
+    border-left: 5px solid #607D8B; /* Gris para Gastado */
+    background-color: #e0e0e0;
 }
 
 .proposal-actions button {
-    margin-left: 10px;
     padding: 8px 12px;
-}
-
-/* Estilo para propuestas aprobadas (opcional) */
-.approved {
-    border-left: 5px solid #4CAF50; /* Verde de aprobado */
-}
-
-.spent {
-    background-color: #ffe0b2; /* Fondo de gasto completado */
-    opacity: 0.95;
-}
-
-/* Estilos para el formulario de gasto que aparece dinámicamente */
-.spend-form h5 {
-    font-size: 1em;
-    margin: 5px 0;
-    color: #333;
-}
-.spend-form label {
-    font-size: 0.85em;
-    display: block;
-    margin-bottom: 2px;
+    margin-left: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: bold;
 }
 
-/* CORRECCIÓN CRÍTICA 3: Asegura que los inputs de descuento se vean bien en el formulario dinámico */
-.spend-form input[type="number"] {
-    width: 100%; 
-    padding: 8px; 
-    box-sizing: border-box;
-    margin-top: 5px;
+.approve-btn {
+    background-color: #FFC107; /* Amarillo para Aprobar */
+    color: var(--color-text);
 }
 
+.delete-btn {
+    background-color: var(--color-secondary);
+    color: white;
+}
 
-/* ========================================================== */
-/* ESTILOS PARA LA DISTRIBUCIÓN DE GASTO DINÁMICO (ARREGLO DE ESPACIADO) */
-/* ========================================================== */
+/* ESTILOS DEL FORMULARIO DE GASTO (SPEND) */
+.spend-form {
+    display: block; /* Vuelve a formato de bloque */
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-top: 10px;
+}
 
-/* Contenedor principal de cada persona */
+.spend-form h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: left;
+    color: #333;
+}
+
 .spend-row {
     display: flex;
-    flex-wrap: wrap; 
-    gap: 15px; /* Más espacio entre columnas */
-    margin-bottom: 15px;
-    border: 1px dashed #9370DB50; /* Línea de color más acorde al tema */
+    flex-wrap: wrap;
+    gap: 10px;
     padding: 10px;
-    border-radius: 8px;
-    align-items: flex-end; /* Alinea los inputs en la base */
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
 }
 
-/* Título (Ej: Descuento de Juan) */
 .spend-row h5 {
-    width: 100%; /* El título debe ocupar toda la fila superior */
-    color: #9370DB;
-    margin: 0 0 5px 0;
-    font-size: 1.1em;
-}
-
-/* Grupos de Input (USD y Bs) */
-.input-group {
-    flex: 1; /* Distribuye el espacio equitativamente */
-    min-width: 100px; 
-}
-
-.input-group label {
-    font-size: 0.9em;
-    font-weight: normal;
-    display: block;
-    margin-bottom: 2px;
-}
-/* Reafirma el estilo para los inputs dentro de este formulario */
-.spend-row input[type="number"] {
-    padding: 8px;
-    box-sizing: border-box;
-    width: 100%;
+    flex: 1 1 100%;
     margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
 }
 
+.spend-row .input-group {
+    flex: 1 1 calc(50% - 15px);
+    min-width: 120px;
+}
 
-/* ========================================================== */
-/* 4. MEDIA QUERIES (RESPONSIVE DESIGN PARA CELULAR) */
-/* ========================================================== */
-
-@media (max-width: 600px) {
-    
+/* Responsive Design */
+@media (max-width: 768px) {
     .container {
-        margin: 15px auto; /* Reducir el margen superior/inferior en móvil */
-        padding: 0 10px; /* Reducir el padding lateral */
+        margin-top: 10px;
+        padding: 15px;
     }
 
-    /* 1. Contenedores de Ahorro: Apilar las tarjetas */
-    .savings-container {
+    .balances, .forms-group, .proposals-list {
         flex-direction: column;
-        gap: 15px; 
+        gap: 15px;
     }
 
-    /* 2. Formulario de Aporte (Juan y Brithany): Inputs al 100% */
-    #my-contribution-form input, 
-    #her-contribution-form input {
-        width: 100%; 
-        display: block; 
-        margin-right: 0;
-    }
-    
-    /* 3. Formulario de Propuesta: Inputs y Select al 100% */
-    #new-proposal-form input, 
-    #new-proposal-form select {
-        width: 100%;
-        display: block;
-        margin-right: 0;
-        margin-bottom: 10px;
+    .balance-card, .contribution-form, .list-section {
+        min-width: 100%;
     }
 
-    /* 4. Formulario Dinámico de Gasto (spend-row): Ajustar */
-    .spend-row {
+    .proposal-item {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
+
+    .proposal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 5px;
+    }
     
-    /* Permite que USD y Bs se sigan mostrando lado a lado */
-    .input-group {
-        min-width: 45%; 
+    .proposal-actions button {
+        margin-left: 0;
+        margin-right: 8px;
+        margin-top: 5px;
     }
 }

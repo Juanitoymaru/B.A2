@@ -3,67 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💑 Nuestros Ahorros</title>
+    <title>Nuestros Ahorros | Juan & Brithany</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Icono de Corazón en la pestaña -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
 </head>
 <body>
+    <div class="container">
+        <h1>💸 Nuestros Ahorros en Pareja</h1>
+        <p class="tagline">¡Sincronizado en tiempo real!</p>
 
-    <header>
-        <h1>Nuestros Ahorros 💜</h1>
-        <p>Ahorremos juntos para hacer realidad nuestras mejores ideas.</p>
-    </header>
-
-    <main class="container">
-        <section class="savings-container">
-            <div class="card my-savings">
-                <h2><i class="fas fa-user"></i> Juan</h2>
-                <div class="current-balance">
-                    <span id="my-balance-usd">$0.00</span> / <span id="my-balance-bs">0 Bs</span>
-                </div>
-                <form id="my-contribution-form">
-                    <input type="number" id="my-amount-usd" placeholder="Monto ($)" min="0.01" step="0.01">
-                    <input type="number" id="my-amount-bs" placeholder="Monto (Bs)" min="1" step="1">
-                    <button type="submit">Añadir Aporte</button>
-                </form>
+        <!-- Seccion de Saldos -->
+        <section class="balances">
+            <h2>Saldos Acumulados</h2>
+            <div class="balance-card juan">
+                <h3>Juan</h3>
+                <p>USD: <span id="my-balance-usd">$0.00</span></p>
+                <p>BS: <span id="my-balance-bs">0 Bs</span></p>
             </div>
-
-            <div class="card her-savings">
-                <h2><i class="fas fa-heart"></i> Brithany</h2>
-                <div class="current-balance">
-                    <span id="her-balance-usd">$0.00</span> / <span id="her-balance-bs">0 Bs</span>
-                </div>
-                <form id="her-contribution-form">
-                    <input type="number" id="her-amount-usd" placeholder="Monto ($)" min="0.01" step="0.01">
-                    <input type="number" id="her-amount-bs" placeholder="Monto (Bs)" min="1" step="1">
-                    <button type="submit">Añadir Aporte</button>
-                </form>
+            <div class="balance-card brithany">
+                <h3>Brithany</h3>
+                <p>USD: <span id="her-balance-usd">$0.00</span></p>
+                <p>BS: <span id="her-balance-bs">0 Bs</span></p>
             </div>
         </section>
 
-        <section class="proposals-container card">
-            <h2><i class="fas fa-lightbulb"></i> Pizarra de Propuestas</h2>
+        <!-- Seccion de Aportes -->
+        <section class="contributions">
+            <h2>💰 Registrar Aporte</h2>
             
+            <div class="forms-group">
+                <!-- Formulario de Aporte de Juan -->
+                <div class="contribution-form juan">
+                    <h3>Aporte de Juan</h3>
+                    <form id="my-contribution-form">
+                        <div class="input-group">
+                            <label for="my-amount-usd">Monto en USD ($):</label>
+                            <input type="number" id="my-amount-usd" min="0" step="0.01" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="my-amount-bs">Monto en BS:</label>
+                            <input type="number" id="my-amount-bs" min="0" step="1" value="0">
+                        </div>
+                        <button type="submit" class="submit-btn">Aportar</button>
+                    </form>
+                </div>
+
+                <!-- Formulario de Aporte de Brithany -->
+                <div class="contribution-form brithany">
+                    <h3>Aporte de Brithany</h3>
+                    <form id="her-contribution-form">
+                        <div class="input-group">
+                            <label for="her-amount-usd">Monto en USD ($):</label>
+                            <input type="number" id="her-amount-usd" min="0" step="0.01" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="her-amount-bs">Monto en BS:</label>
+                            <input type="number" id="her-amount-bs" min="0" step="1" value="0">
+                        </div>
+                        <button type="submit" class="submit-btn">Aportar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seccion de Propuestas de Gasto -->
+        <section class="proposals-form">
+            <h2>🛍️ Nueva Propuesta de Gasto</h2>
             <form id="new-proposal-form">
-                <input type="text" id="proposal-name" placeholder="Nombre de la idea (Ej: Cena romántica)" required>
-                <input type="number" id="proposal-cost" placeholder="Costo Estimado ($)" required min="0.01" step="0.01">
-                <select id="proposal-proposer">
-                    <option value="Juan">Propuesto por Juan</option>
-                    <option value="Brithany">Propuesto por Brithany</option>
-                </select>
-                <button type="submit">Proponer Idea</button>
+                <div class="input-group full-width">
+                    <label for="proposal-name">Nombre de la Idea/Gasto:</label>
+                    <input type="text" id="proposal-name" required>
+                </div>
+                <div class="input-group">
+                    <label for="proposal-cost">Costo Estimado (USD $):</label>
+                    <input type="number" id="proposal-cost" min="0.01" step="0.01" required>
+                </div>
+                <div class="input-group">
+                    <label for="proposal-proposer">Propuesto por:</label>
+                    <select id="proposal-proposer" required>
+                        <option value="juan">Juan</option>
+                        <option value="brithany">Brithany</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn full-width">Crear Propuesta</button>
             </form>
-
-            <div id="pending-proposals" class="proposal-list">
-                <h3>Ideas Pendientes de Aprobación:</h3>
-                </div>
-            
-            <div id="approved-proposals" class="proposal-list">
-                <h3>Ideas Aprobadas y Gastos:</h3>
-                </div>
         </section>
-    </main>
 
+        <!-- Seccion de Listas de Propuestas -->
+        <section class="proposals-list">
+            <div id="pending-proposals" class="list-section">
+                <!-- Contenido generado por JS -->
+                <h3>Ideas Pendientes de Aprobación:</h3>
+            </div>
+            <div id="approved-proposals" class="list-section">
+                <!-- Contenido generado por JS -->
+                <h3>Ideas Aprobadas y Gastos:</h3>
+            </div>
+        </section>
+
+        <footer>
+            <p>Sincronización en tiempo real gracias a Firebase Realtime Database.</p>
+        </footer>
+    </div>
+
+    <!-- Carga de Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <!-- Script principal de la aplicación -->
     <script src="script.js"></script>
 </body>
 </html>
